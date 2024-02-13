@@ -1,8 +1,20 @@
 import unittest
 
-class MyTestCase(unittest.TestCase):
-    def test_something(self):
-        self.assertEqual(True, False)  # add assertion here
+from app.player import Player
+
+
+class PlayerUnitTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.test_uid = '007'
+        self.test_name = '<NAME>'
+        self.player = Player(self.test_uid, self.test_name)
+
+    def test_uid(self):
+        self.assertEqual(self.player.uid, self.test_uid, "Player Unique ID's do not match.")
+
+    def test_name(self):
+        self.assertEqual(self.player.name, self.test_name, "Player Name does not match.")
+
 
 if __name__ == '__main__':
     unittest.main()
