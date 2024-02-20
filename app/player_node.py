@@ -38,5 +38,5 @@ class PlayerNode:
         self._value = player
 
     def __str__(self) -> str:
-        return f'Player Node containing {self.value}' if self.value else "Empty Player Node"
-
+        return f'Player Node containing {self.value}' \
+            if self.value else "Empty Player Node"
