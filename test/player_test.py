@@ -1,6 +1,6 @@
 import unittest
 
-from app.player import Player
+from app import Player
 
 
 class PlayerUnitTests(unittest.TestCase):

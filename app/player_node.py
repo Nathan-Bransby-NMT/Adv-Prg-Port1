@@ -1,5 +1,5 @@
 from __future__ import annotations
-from app.player import Player
+from app import Player
 
 
 class PlayerNode:
