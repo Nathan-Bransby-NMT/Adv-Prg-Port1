@@ -61,6 +61,22 @@ class PlayerListUnitTest(unittest.TestCase):
             "The tail node does not point to the previous node after appending."
         )
 
+    def test_player_removal_from_head(self):
+        """Tests that you can remove a player from the head of a populated list."""
+        self.player_list.append(self.test_player)
+        # Delete a single item from the head of the list.
+        self.player_list.remove_from_head()
+        # Assert that the head was removed.
+        self.assertIsNone(self.player_list.head, "The element was not removed from the head after deletion.")
+
+    def test_player_removal_from_tail(self):
+        """Tests that upi can remove a player from the tail of a populated list."""
+        self.player_list.append(self.test_player)
+        # Delete a single element from the tail of the list.
+        self.player_list.remove_from_tail()
+        # Assert that the tail was removed.
+        self.assertIsNone(self.player_list.tail, "The element was not removed from the tail after deletion.")
+
 
 if __name__ == '__main__':
     unittest.main()
