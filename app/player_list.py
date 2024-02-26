@@ -1,4 +1,5 @@
 from app import PlayerNode, Player
+from typing import Generator, Any, Literal
 
 
 class PlayerList:
@@ -32,8 +33,18 @@ class PlayerList:
             self._tail.next = value
         self._tail = value
 
-    def __init__(self, player_data: list[Player] | None = None) -> None:
-        self.prepend(player_data)
+    def __init__(self, player_data: list[Player] | Player | None = None) -> None:
+        if self._head is None:
+            self.prepend(player_data)
+
+    def __iter__(self) -> Generator[PlayerNode | None, Any, None]:
+        current = self.head
+        while current:
+            yield current
+            current = current.next
+
+    def __len__(self) -> int:
+        return len([_ for _ in self])
 
     def prepend(self, data: Player | list[Player]) -> None:
         """Inserts one or more players to the beginning of the list.
@@ -50,9 +61,14 @@ class PlayerList:
                 self.prepend(player)
             return
 
-        if self.tail is None:
-            self.tail = data
-        self.head = PlayerNode(data)
+        new_node = PlayerNode(data)
+        if not self.head:
+            self.tail = new_node
+            self.head = new_node
+        else:
+            new_node.next = self.head
+            self.head.prev = new_node
+            self.head = new_node
 
     def append(self, data: Player | list[Player]) -> None:
         """Inserts one or more Players to the end of the list.
@@ -67,10 +83,14 @@ class PlayerList:
             for player in data:
                 self.append(player)
             return
-
-        if self.head is None:
-            self.head = data
-        self.tail = PlayerNode(data)
+        new_node = PlayerNode(data)
+        if not self.head:
+            self.head = new_node
+            self.tail = new_node
+        else:
+            self.tail.next = new_node
+            new_node.prev = self.tail
+            self._tail = new_node
 
     def remove_from_head(self, count: int = None) -> None:
         """Delete one or more Players from the start of the list.
@@ -83,25 +103,30 @@ class PlayerList:
                 If no value is set, only the first element is removed. Defaults as None.
 
         Raises:
-              IndexError: If the count is not None and less-than 0.
+              IndexError: If the count is not None and less-than 0 or greater-than the number of elements.
               ValueError: If the list doesn't contain any elements.
         """
-        if self.head is None:
+        if self.is_empty:
             raise ValueError("Error: Unable to remove from an empty list.")
 
         if count:
             if count < 0:
                 raise IndexError("Error: The count must be a positive integer.")
-            try:
-                for i in range(count):
-                    self.remove_from_head()
-                return None
-            except ValueError:
-                return None
+            elif len(self) < count:
+                raise IndexError("Error: The value for count must be less than the number of elements in the list.")
 
-        self._head = self._head.next
-        if self.head is not None:
-            self._head.prev = None
+            # remove a set amount of values from the head
+            for i in range(count):
+                self.remove_from_head()
+            return
+
+        if self._head == self._tail:
+            self._head = None
+            self._tail = None
+        else:
+            self._head = self._head.next
+            if self.head:
+                self._head.prev = None
 
     def remove_from_tail(self, count: int = None) -> None:
         """Delete one or more Players from the end of the list.
@@ -114,22 +139,67 @@ class PlayerList:
             If no value is set, only the end element will be removed. Defaults as None.
 
         Raises:
-            IndexError: If the value count is not None less-than 0.
+            IndexError: If the value count is not None and either less-than 0 or greater than the number of elements.
             ValueError: If the list doesn't contain any elements.
         """
-        if self.tail is None:
+        if self.is_empty:
             raise ValueError("Error: Unable to remove from an empty list.")
 
         if count:
             if count < 0:
                 raise IndexError("Error: The count must be a positive integer.")
-            try:
-                for i in range(count):
-                    self.remove_from_head()
-                return None
-            except ValueError:
-                return None
+            elif len(self) < count:
+                raise IndexError("Error: The value of count must be less than the number of elements in the list.")
 
-        self._tail = self._tail.prev
-        if self.tail is not None:
-            self._tail.next = None
+            # remove a set amount of values from the tail.
+            for i in range(count):
+                self.remove_from_tail()
+            return
+
+        if self._tail == self._head:
+            self._tail = None
+            self._head = None
+        else:
+            self._tail = self._tail.prev
+            if self.tail:
+                self._tail.next = None
+
+    def remove_by_key(self, key: str) -> None:
+        """Removes a Player by specifying their UID.
+
+        Searches through the list looking for a player with the specified
+        Unique-ID and deletes the player from the list.
+
+        Args:
+            key (str): The Unique-ID of the Player to be removed.
+
+        Raises:
+            ValueError: If the list is empty.
+            KeyError: If there is no Player with the specified UID.
+        """
+        if self.is_empty:
+            raise ValueError("Error: Unable to remove from an empty list.")
+
+        for node in self:
+            if node.value.uid != key:
+                continue
+
+            if not node.prev:
+                self._head = node.next
+            else:
+                node.prev.next = node.next
+
+            if not node.next:
+                self._tail = node.prev
+            else:
+                node.next.prev = node.prev
+
+            return
+        raise KeyError(f"Could not find a Player with the key {key}.")
+
+    def display(self, direction: Literal['forward', 'backwards'] = 'forward') -> None:
+        match direction:
+            case 'forward':
+                print(f'{[node.value for node in self]!r}')
+            case 'backward':
+                print(f'{[[node.value for node in self][len(self)-(i+1)] for i in range(len(self))]}')

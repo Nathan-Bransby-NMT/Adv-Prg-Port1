@@ -2,6 +2,10 @@ from __future__ import annotations
 from app import Player
 
 
+class NodeValueNotFound(ValueError):
+    ...
+
+
 class PlayerNode:
 
     _value: Player = None
@@ -26,17 +30,20 @@ class PlayerNode:
 
     @property
     def key(self) -> str:
-        if not self.value:
-            raise NotImplementedError("No player assigned to the node.")
+        if self.value is None:
+            raise NodeValueNotFound("Unable to fetch key, no player assigned to the node.")
         return self.value.uid
 
     @prev.setter
-    def prev(self, value: PlayerNode) -> None:
+    def prev(self, value: PlayerNode | None) -> None:
         self._prev = value
 
     def __init__(self, player: Player) -> None:
         self._value = player
 
     def __str__(self) -> str:
-        return f'Player Node containing {self.value}' \
+        return f'PlayerNode[{self.value!r}]' \
             if self.value else "Empty Player Node"
+
+    def __repr__(self) -> str:
+        return f'{self.__class__.__name__}({self._value!r})'

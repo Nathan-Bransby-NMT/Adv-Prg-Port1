@@ -20,4 +20,7 @@ class Player:
         self._name = name
 
     def __str__(self) -> str:
-        return f'Player:\n\tUID: {self.uid}\n\tName: {self.name}'
+        return f'Player[uid={self.uid!r}, name={self.name!r}]'
+
+    def __repr__(self) -> str:
+        return f'{self.__class__.__name__}({self.uid!r}, {self.name!r})'

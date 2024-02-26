@@ -1,5 +1,5 @@
 import unittest
-from app import PlayerList, PlayerNode, Player
+from app import PlayerList, PlayerNode, Player, NodeValueNotFound
 
 
 class PlayerListUnitTest(unittest.TestCase):
@@ -64,18 +64,36 @@ class PlayerListUnitTest(unittest.TestCase):
     def test_player_removal_from_head(self):
         """Tests that you can remove a player from the head of a populated list."""
         self.player_list.append(self.test_player)
+        count = len(self.player_list)
         # Delete a single item from the head of the list.
         self.player_list.remove_from_head()
         # Assert that the head was removed.
-        self.assertIsNone(self.player_list.head, "The element was not removed from the head after deletion.")
+        self.assertNotEqual(
+            count, len(self.player_list),
+            "The element was not removed from the head after deletion."
+        )
 
     def test_player_removal_from_tail(self):
         """Tests that upi can remove a player from the tail of a populated list."""
         self.player_list.append(self.test_player)
+        count = len(self.player_list)
         # Delete a single element from the tail of the list.
         self.player_list.remove_from_tail()
         # Assert that the tail was removed.
-        self.assertIsNone(self.player_list.tail, "The element was not removed from the tail after deletion.")
+        self.assertNotEqual(
+            count, len(self.player_list),
+            "The element was not removed from the tail after deletion."
+        )
+
+    def test_player_removal_by_key(self):
+        """Tests the removal of a player by reference to the players uid attribute."""
+        self.player_list.prepend(self.test_player)
+        self.assertEqual(self.test_uid, self.player_list.head.key)
+        self.player_list.remove_by_key(self.test_uid)
+        self.assertIsNone(self.player_list.head.value, "The element was not removed with key.")
+        self.player_list.append(self.test_player)
+        self.player_list.display('backward')
+        self.player_list.display('forward')
 
 
 if __name__ == '__main__':
