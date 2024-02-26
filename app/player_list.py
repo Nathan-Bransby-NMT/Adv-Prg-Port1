@@ -1,4 +1,3 @@
-from typing import Any
 from app import PlayerNode, Player
 
 
@@ -37,19 +36,38 @@ class PlayerList:
         self.prepend(player_data)
 
     def prepend(self, data: Player | list[Player]) -> None:
-        """Inserts one or more players to the head of the list.
+        """Inserts one or more players to the beginning of the list.
 
-        Provides methodologies to add players to the head of the list as apposed to appending at the tail.
+        Provides methodologies to add Players to the head of the list as apposed
+        to appending the item at the tail of the list.
 
         Args:
-            data (Player | list[Player]):
-                The Player / Players you want to insert at the head of the list.
+            data (Player | list[Player]): The Player / Players to insert at the start of the list.
 
         """
         if isinstance(data, list):
             for player in data:
                 self.prepend(player)
             return
+
         if self.tail is None:
             self.tail = data
         self.head = PlayerNode(data)
+
+    def append(self, data: Player | list[Player]) -> None:
+        """Inserts one or more Players to the end of the list.
+
+        Provides methodologies to add Players to the tail of the list as apposed
+        to prepending at the head of the list.
+
+        Args:
+            data (Player | list[Player]): The Player / Players to insert onto the end of the list.
+        """
+        if isinstance(data, list):
+            for player in data:
+                self.append(player)
+            return
+
+        if self.head is None:
+            self.head = data
+        self.tail = PlayerNode(data)

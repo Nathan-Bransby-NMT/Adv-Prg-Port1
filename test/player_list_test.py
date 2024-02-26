@@ -12,19 +12,54 @@ class PlayerListUnitTest(unittest.TestCase):
     def test_player_prepending_into_empty_list(self):
         """Tests player insertion into the head of an empty PlayerList"""
         self.player_list.prepend(self.test_player)  # Insert a player into the list
-        self.assertIsNotNone(self.player_list.head, "No value assigned to the head after insertion.")
-        self.assertIsNotNone(self.player_list.tail, "No value assigned to the tail after insertion to an empty list.")
+        self.assertIsNotNone(self.player_list.head, "No value assigned to the head after prepending to an empty list.")
+        self.assertIsNotNone(self.player_list.tail, "No value assigned to the tail after prepending to an empty list.")
 
     def test_player_prepending_into_populated_list(self):
-        """Tests player insertion into the head of an already populated PlayerList"""
+        """Tests player insertion into the head of an already populated PlayerList."""
         player2 = Player(self.test_uid, self.test_player_name)  # Test player 2.
         player1 = self.test_player  # Test player 1.
         self.player_list.prepend(player1)  # Insert player 1
         current_head = self.player_list.head  # The value of the head before 2nd insertion.
         self.player_list.prepend(player2)  # insert player 2
-        self.assertNotEqual(current_head, self.player_list.head, "The head value has not been updated after insertion.")
-        self.assertEqual(self.player_list.head.next, current_head,
-                         "The head node does not point to the next node after insertion.")
+        self.assertNotEqual(
+            current_head,
+            self.player_list.head,
+            "The head value has not been updated after prepending."
+        )
+        self.assertEqual(
+            self.player_list.head.next, current_head,
+            "The head node does not point to the next node after insertion."
+        )
+
+    def test_player_appending_into_empty_list(self):
+        """Tests player insertion into the tail of an empty list."""
+        self.player_list.append(self.test_player)
+        self.assertIsNotNone(
+            self.player_list.head,
+            "No value assigned to the head after appending to an empty list."
+        )
+        self.assertIsNotNone(
+            self.player_list.tail,
+            "No value assigned to the tail after appending to an empty list."
+        )
+
+    def test_player_appending_into_populated_list(self):
+        """Tests player insertion into the tail of an already populated PlayerList."""
+        player2 = Player(self.test_uid, self.test_player_name)
+        player1 = self.test_player
+        self.player_list.append(player1)
+        current_tail = self.player_list.tail
+        self.player_list.append(player2)
+        self.assertNotEqual(
+            current_tail,
+            self.player_list.tail,
+            "The tail of the list has not been updated after appending."
+        )
+        self.assertEqual(
+            self.player_list.tail.prev, current_tail,
+            "The tail node does not point to the previous node after appending."
+        )
 
 
 if __name__ == '__main__':
