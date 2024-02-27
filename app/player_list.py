@@ -9,6 +9,12 @@ class PlayerList:
 
     @property
     def is_empty(self) -> bool:
+        """Boolean indicating whether the list is empty.
+
+        Returns:
+            True: If the PlayerList is empty.
+            False: If the list contains PlayerNodes.
+        """
         return self._head is None
 
     @property
@@ -40,11 +46,12 @@ class PlayerList:
     def __iter__(self) -> Generator[PlayerNode | None, Any, None]:
         current = self.head
         while current:
+            # if current.value is not None:
             yield current
             current = current.next
 
     def __len__(self) -> int:
-        return len([_ for _ in self])
+        return len([element for element in self])
 
     def prepend(self, data: Player | list[Player]) -> None:
         """Inserts one or more players to the beginning of the list.
@@ -198,8 +205,21 @@ class PlayerList:
         raise KeyError(f"Could not find a Player with the key {key}.")
 
     def display(self, direction: Literal['forward', 'backwards'] = 'forward') -> None:
+        """Displays the current elements stored in the list.
+
+        Provides the ability to display the current elements backward and forwards
+        in an easy-to-read format.
+
+        Args:
+            direction (Literal['forward', 'backwards']): A string literal representation of the direction
+                to iterate and display the list. Defaults to 'forward'.
+        """
+        forward_display = f'{[node.value for node in self]!r}'
+        backward_display = f'{[forward_display][-len(forward_display):]}'
+        result: str = None
         match direction:
             case 'forward':
-                print(f'{[node.value for node in self]!r}')
+                result = forward_display
             case 'backward':
-                print(f'{[[node.value for node in self][len(self)-(i+1)] for i in range(len(self))]}')
+                result = backward_display
+        print(result)

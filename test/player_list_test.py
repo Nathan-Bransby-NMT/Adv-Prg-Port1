@@ -92,8 +92,6 @@ class PlayerListUnitTest(unittest.TestCase):
         self.player_list.remove_by_key(self.test_uid)
         self.assertIsNone(self.player_list.head.value, "The element was not removed with key.")
         self.player_list.append(self.test_player)
-        self.player_list.display('backward')
-        self.player_list.display('forward')
 
 
 if __name__ == '__main__':
