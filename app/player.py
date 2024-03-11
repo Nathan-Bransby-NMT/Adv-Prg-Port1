@@ -2,6 +2,7 @@
 Filename: player.py
 Author:   Nathan Bransby
 Email:    v141198@tafe.wa.edu.au  
+Updated:  12/03/2024
 """
 
 from argon2 import PasswordHasher
