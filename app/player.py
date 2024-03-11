@@ -39,7 +39,7 @@ class Player:
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}({self.uid!r}, {self.name!r})'
 
-    @staticmethid
+    @staticmethod
     def add_password(password: str) -> tuple[PasswordHasher, bytes]:
         """Static Player method that generates a encoded password hash.
 

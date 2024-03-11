@@ -3,11 +3,14 @@ from app import PlayerList, PlayerNode, Player, NodeValueNotFound
 
 
 class PlayerListUnitTest(unittest.TestCase):
+    
+    test_uid: str = "<UID>"
+    test_player_name: str = "<NAME>"
+    test_password: str = "<PASSWORD>"
+    
     def setUp(self) -> None:
         self.player_list = PlayerList()
-        self.test_uid: str = "P1"
-        self.test_player_name: str = "Player1"
-        self.test_player = Player(self.test_uid, self.test_player_name)
+        self.test_player = Player(self.test_uid, self.test_player_name, self.test_password)
 
     def test_player_prepending_into_empty_list(self):
         """Tests player insertion into the head of an empty PlayerList"""
