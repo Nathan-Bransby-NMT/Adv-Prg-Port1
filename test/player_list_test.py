@@ -49,7 +49,7 @@ class PlayerListUnitTest(unittest.TestCase):
 
     def test_player_appending_into_populated_list(self):
         """Tests player insertion into the tail of an already populated PlayerList."""
-        player2 = Player(self.test_uid, self.test_player_name)
+        player2 = Player(self.test_uid, self.test_player_name, self.test_password)
         player1 = self.test_player
         self.player_list.append(player1)
         current_tail = self.player_list.tail
