@@ -20,7 +20,7 @@ class PlayerListUnitTest(unittest.TestCase):
 
     def test_player_prepending_into_populated_list(self):
         """Tests player insertion into the head of an already populated PlayerList."""
-        player2 = Player(self.test_uid, self.test_player_name)  # Test player 2.
+        player2 = Player(self.test_uid, self.test_player_name, self.test_password)  # Test player 2.
         player1 = self.test_player  # Test player 1.
         self.player_list.prepend(player1)  # Insert player 1
         current_head = self.player_list.head  # The value of the head before 2nd insertion.
